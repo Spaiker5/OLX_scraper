@@ -1,0 +1,7 @@
+CENY = []
+TYTUŁY = []
+DATY = []
+LINKI = []
+OBRAZY = []
+ROZMIARY = []
+STRONY = []
