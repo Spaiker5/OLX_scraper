@@ -8,7 +8,7 @@ olx = "https://www.olx.pl/sport-hobby/q-rolki/"  # input("Podaj link do wyników
 i = 1
 
 
-def parse(i, olx):
+def data_framing(i, olx):
     response = requests.get(olx + f"?page={i}")
     strona = response.text
     # print(response)
@@ -34,4 +34,4 @@ def parse(i, olx):
     df = DF
 
 
-parse(i, olx)
+data_framing(i, olx)
