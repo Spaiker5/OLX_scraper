@@ -1,3 +1,6 @@
+import datetime
+from datetime import date
+
 from config import *
 
 
@@ -15,11 +18,11 @@ def scrab_cen(sup):
 
     for tag in tagi:
         cena = tag.getText().split()
-        CENY.append(cena)
+        CENY.append(int(cena[0]))
 
 
 def scrab_tytułów(sup):
-    tagi = sup.find_all(name="a", class_="marginright5 link linkWithHash detailsLink")
+    tagi = sup.find_all("h3", class_="lheight22 margintop5")
 
     for tag in tagi:
         tytuł = tag.getText().strip()
@@ -29,13 +32,31 @@ def scrab_tytułów(sup):
 def scrab_daty(sup):
     tagi = sup.find_all(name="i", attrs={'data-icon': 'clock'})
 
+    def validate(date_text):
+        try:
+            datetime.datetime.strptime(date_text, '%Y-%m-%d')
+        except ValueError:
+            return False
+        return True
+
     for tag in tagi:
         data = tag.parent.getText()
+        if "dzisiaj" in data:
+            data = date.today().isoformat()
+        elif "wczoraj" in data:
+            data = datetime.date.today() - datetime.timedelta(days=1)
+            data = data.isoformat()
+        elif not validate(data):
+            data = data.split()
+            today = date.today()
+            data = date(today.year, today.month, int(data[0]))
+            # TODO: Ustawić miesiąc z danych nie na pałe.
+            data = data.isoformat()
         DATY.append(data)
 
 
 def scrab_linków(sup):
-    tagi = sup.find_all(name="a", class_="marginright5 link linkWithHash detailsLink")
+    tagi = sup.find_all("h3", class_="lheight22 margintop5")
     for tag in tagi:
         link = tag.get("href")
         LINKI.append(link)

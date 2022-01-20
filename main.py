@@ -1,6 +1,7 @@
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
+
 from scrab import *
 
 olx = "https://www.olx.pl/sport-hobby/q-rolki/"  # input("Podaj link do wyników wyszukiwania na OLX: ")
@@ -17,20 +18,20 @@ def parse(i, olx):
 
     # ilość_stron(sup)
 
-    while i <= 3:  # ilość_stron(sup)
+    while i <= 2:  # ilość_stron(sup)
         scrab_obrazów(sup)
         scrab_linków(sup)
         scrab_tytułów(sup)
         scrab_cen(sup)
         scrab_daty(sup)
-
-        df = pd.DataFrame({
-            "Tytuł": TYTUŁY,
-            "Ceny": Ceny,
-
-        })
-        print()
         i += 1
+    df = pd.DataFrame({
+        "Tytuł": TYTUŁY,
+        "Ceny": CENY,
+        "Daty": DATY,
+    })
+    print(df)
+    df = DF
 
 
 parse(i, olx)
