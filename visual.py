@@ -1,14 +1,22 @@
 import plotly.express as px
 
+from config import *
+
 
 def wizualizacja(data):
     fig = px.scatter(
-        data, y="Data",
-        x="Cena",
+        data,
+        x=data.index,
+        y="Cena",
         size="Size",
         hover_name="Tytuł",
-        log_x=True,
-        size_max=60,
+
+        size_max=30,
+        hover_data=("Linki", "Data"),
+        labels={
+            "index": "Data"
+        },
+        title=f"Ilość stron {STRONY[-1]}",
 
     )
 
