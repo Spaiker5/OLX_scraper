@@ -58,10 +58,17 @@ def scraby_wyszukania(sup):
             DATY.append(data)
 
     def scrab_linkow(sup):
-        tagi = sup.find_all("h3", class_="lheight22 margintop5")
+        tagi = sup.find_all("a", class_="marginright5 link linkWithHash detailsLinkPromoted linkWithHashPromoted")
+        print(tagi)
         for tag in tagi:
             link = tag.get("href")
             LINKI.append(link)
+            print(tag.contents)
+        tagi = sup.find_all("a", class_="marginright5 link linkWithHash detailsLink")
+        for tag in tagi:
+            link = tag.get("href")
+            LINKI.append(link)
+            print(tag.contents)
 
     def scrab_obrazow(sup):
         tagi = sup.find_all(name="img", class_="fleft")
