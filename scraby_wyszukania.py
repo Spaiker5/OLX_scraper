@@ -18,11 +18,16 @@ def scraby_wyszukania(sup):
         tagi = sup.find_all(name="p", class_="price")
 
         for tag in tagi:
-            cena = tag.getText().split()
+            cena = tag.getText().strip().replace(",", ".")
+            cena = cena.replace("zł","")
+            cena = cena.replace(" ","")
+            print(cena)
             try:
-                CENY.append(int(cena[0]))
+                CENY.append(float(cena))
             except ValueError:
                 CENY.append(0)
+
+
 
     def scrab_tytulow(sup):
         tagi = sup.find_all("h3", class_="lheight22 margintop5")

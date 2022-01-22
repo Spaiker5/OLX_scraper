@@ -12,7 +12,7 @@ def wizualizacja(data):
         hover_name="Tytuł",
 
         size_max=30,
-        hover_data=("Linki", "Data"),
+        hover_data=("Linki", "Data", data.index),
         labels={
             "index": "Data"
         },
