@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from scraby_wyszukania import *
 from visual import *
 
-olx = "https://www.olx.pl/motoryzacja/motocykle-skutery/q-yamaha/" #input("Podaj link do wyników wyszukiwania na OLX: ")
+olx = input("Podaj link do wyników wyszukiwania na OLX: ")
 
 
 def data_framing(olx):
@@ -18,7 +18,7 @@ def data_framing(olx):
     strony = ilosc_stron(start_sup)
     print(strony)
     i = 0
-    while i <= 5:
+    while i <= strony:
         response = requests.get(olx + "?page=" + str(i))
         strona = response.text
 
@@ -34,13 +34,17 @@ def data_framing(olx):
             "Linki": LINKI,
             "Size": SIZE,
         })
-
     except ValueError:
         print("Ojojoj")
-        zipped = list(zip(TYTUŁY, CENY, DATY, LINKI, SIZE))
-        df = pd.DataFrame(zipped, columns=["Tytuł", "Cena", "Data", "Linki", "Size"])
-
-    df = df.drop_duplicates(subset="Tytuł")
+        scraby_wyszukania(sup)
+        df = pd.DataFrame({
+            "Tytuł": TYTUŁY,
+            "Cena": CENY,
+            "Data": DATY,
+            "Linki": LINKI,
+            "Size": SIZE,
+        })
+    df = df.drop_duplicates()
     df = df.sort_values(by="Data", ignore_index=True)
 
     print(datetime.datetime.now() - start)
