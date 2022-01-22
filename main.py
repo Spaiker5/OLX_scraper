@@ -2,36 +2,40 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-from scrab import *
+from scraby_wyszukania import *
+from visual import *
 
 olx = "https://www.olx.pl/sport-hobby/q-rolki/"  # input("Podaj link do wyników wyszukiwania na OLX: ")
-i = 1
 
 
-def data_framing(i, olx):
-    response = requests.get(olx + f"?page={i}")
+def data_framing(olx):
+    start = datetime.datetime.now()
+    response = requests.get(olx)
     strona = response.text
-    # print(response)
-    # print(strona)
 
-    sup = BeautifulSoup(strona, "html.parser")
+    start_sup = BeautifulSoup(strona, "html.parser")
 
-    # ilość_stron(sup)
+    strony = ilosc_stron(start_sup)
+    print(strony)
+    i = 1
+    while i <= strony:
+        response = requests.get(olx + "?page=" + str(i))
+        strona = response.text
 
-    while i <= 2:  # ilość_stron(sup)
-        scrab_obrazów(sup)
-        scrab_linków(sup)
-        scrab_tytułów(sup)
-        scrab_cen(sup)
-        scrab_daty(sup)
+        sup = BeautifulSoup(strona, "html.parser")
+        scraby_wyszukania(sup)
         i += 1
+
     df = pd.DataFrame({
         "Tytuł": TYTUŁY,
-        "Ceny": CENY,
-        "Daty": DATY,
+        "Cena": CENY,
+        "Data": DATY,
+        "Linki": LINKI,
+        "Size": SIZE,
     })
-    print(df)
-    df = DF
+    print(datetime.datetime.now() - start)
+
+    return df
 
 
-data_framing(i, olx)
+wizualizacja(data_framing(olx))
