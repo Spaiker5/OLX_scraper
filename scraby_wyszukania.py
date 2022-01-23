@@ -22,7 +22,7 @@ def data_framing(OLX):
     start_sup = BeautifulSoup(pierwsza_strona, "html.parser")
     strony = ilosc_stron(start_sup)
     i = 0
-    while i <= 3:
+    while i <= strony:
         response = requests.get(OLX + "?page=" + str(i))
         strona = response.text
 

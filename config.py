@@ -9,7 +9,7 @@ STRONY = []
 DF = []
 
 LOOPY = 0
-OLX = "https://www.olx.pl/elektronika/komputery/q-serwer/"  # input("Podaj link do wyników wyszukiwania na OLX: ")
+OLX = input("Podaj link do wyników wyszukiwania na OLX: ")
 
 
 def powtorki(x):
