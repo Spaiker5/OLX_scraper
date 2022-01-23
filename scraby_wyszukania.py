@@ -1,10 +1,11 @@
 import datetime
 from datetime import date
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-from config import *
+OLX = input("Podaj link do listy wyszukania na OLX: ")
 
 
 def ilosc_stron(start_sup):
@@ -15,20 +16,18 @@ def ilosc_stron(start_sup):
     return STRONY[-1]
 
 
-def data_framing(OLX):
-    response = requests.get(OLX)
-    pierwsza_strona = response.text
+def powtorki(x):
+    return list(dict.fromkeys(x))
 
-    start_sup = BeautifulSoup(pierwsza_strona, "html.parser")
-    strony = ilosc_stron(start_sup)
-    i = 0
-    while i <= strony:
-        response = requests.get(OLX + "?page=" + str(i))
-        strona = response.text
 
-        sup = BeautifulSoup(strona, "html.parser")
-        scraby_wyszukania(sup)
-        i += 1
+CENY = []
+TYTUL = []
+DATY = []
+LINKI = []
+OBRAZY = []
+ROZMIARY = []
+SIZE = []
+STRONY = []
 
 
 def scraby_wyszukania(sup):
@@ -37,6 +36,31 @@ def scraby_wyszukania(sup):
     scrab_daty(sup)
     scrab_linkow(sup)
     scrab_obrazow(sup)
+
+
+def data_farming(OLX):
+    response = requests.get(OLX)
+    pierwsza_strona = response.text
+
+    start_sup = BeautifulSoup(pierwsza_strona, "html.parser")
+    strony = ilosc_stron(start_sup)
+    i = 0
+    while i <= 1:
+        response = requests.get(OLX + "?page=" + str(i))
+        strona = response.text
+
+        sup = BeautifulSoup(strona, "html.parser")
+        scraby_wyszukania(sup)
+        i += 1
+    zipp = list(zip(TYTUL, CENY, DATY, LINKI, OBRAZY, SIZE))
+    df = pd.DataFrame(zipp, columns=[
+        "Tytuł", "Cena", "Data", "Link", "Obraz", "Size"
+    ])
+
+
+    df = df.sort_values(by="Data", ignore_index=True)
+
+    return df
 
 
 def scrab_cen(sup):
@@ -93,7 +117,6 @@ def scrab_linkow(sup):
         tag = tag.find("a")
         link = tag.get("href")
         LINKI.append(link)
-
 
 
 def scrab_obrazow(sup):
